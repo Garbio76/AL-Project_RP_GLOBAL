@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "AL Project_RP_Global",
+            "request": "launch",
+            "type": "al",
+            "environmentType": "Sandbox",
+            "environmentName": "RPGlobalIT_TEST",
+            "tenant": "2b47d092-4f5e-47b2-a25c-a07ad46304da",
+            "startupObjectType": "Page",
+            "startupObjectId": 9022,
+            "breakOnError": true,
+            "launchBrowser": true,
+            "enableLongRunningSqlStatements": true,
+            "enableSqlInformationDebugger": true
+        },
+    ]
+}

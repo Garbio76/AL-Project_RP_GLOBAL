@@ -1,0 +1,7 @@
+{
+    "al.enableCodeAnalysis": true,
+    "al.codeAnalyzers": ["${CodeCop}","${PerTenantExtensionCop}" ,"${UICop}"],
+        "debug.allowBreakpointsEverywhere": true,  
+        
+        
+}
