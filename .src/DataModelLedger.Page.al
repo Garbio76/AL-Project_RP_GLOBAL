@@ -1,10 +1,17 @@
+namespace AL_Project_RP_Global.Default_Publisher;
+using Microsoft.Finance.Dimension;
+using Microsoft.Finance.GeneralLedger.Journal;
+using Microsoft.Finance.GeneralLedger.Ledger;
+using Microsoft.FixedAssets.Ledger;
+using Microsoft.Purchases.Vendor;
+using Microsoft.Sales.Customer;
 page 50000 DataModelLedger
+
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = None;
     SourceTable = "G/L Entry";
-    
     layout
     {
         area(Content)
@@ -16,7 +23,6 @@ page 50000 DataModelLedger
                     Caption = 'Entry No.';
                     ToolTip = 'Entry No.';
                 }
-
                 field("Posting Date"; Rec."Posting Date")
                 {
                     Caption = 'Posting Date';
@@ -57,19 +63,16 @@ page 50000 DataModelLedger
                     Caption = 'Gen. Posting Type';
                     ToolTip = 'Gen. Posting Type';
                 }
-
                 field("Source Type"; Rec."Source Type")
                 {
                     Caption = 'Source Type';
                     ToolTip = 'Source Type';
                 }
-
                 field("Source No."; Rec."Source No.")
                 {
                     Caption = 'Source No.';
                     ToolTip = 'Source No';
                 }
-
                 field("Bal. Account Type"; Rec."Bal. Account Type")
                 {
                     Caption = 'Bal. Account Type';
@@ -80,7 +83,6 @@ page 50000 DataModelLedger
                     Caption = 'Bal. Account No.';
                     ToolTip = 'Bal. Account No.';
                 }
-
                 field("PROGETTO"; Rec."Global Dimension 1 Code")
                 {
                     Caption = 'PROGETTO';
@@ -91,7 +93,6 @@ page 50000 DataModelLedger
                     Caption = 'LINEA BUDGET';
                     ToolTip = 'LINEA BUDGET';
                 }
-
                 field("GRUPPO"; Rec."Shortcut Dimension 3 Code")
                 {
                     Caption = 'GRUPPO';
@@ -102,20 +103,23 @@ page 50000 DataModelLedger
                     Caption = 'VARIATIONS GROUP';
                     ToolTip = 'VARIATIONS GROUP';
                 }
+                field("VARIATIONS GROUP CODE DEF_DIM"; GLDefDim)
+                {
+                    Caption = 'Variations group Code Def. Dim.';
+                    ToolTip = 'Variations group Code Def. Dim.';
+                    Editable = false;
+                }
                 field("VARIATIONS CODE"; Rec."Shortcut Dimension 5 Code")
-
                 {
                     Caption = 'VARIATIONS CODE';
                     ToolTip = 'VARIATIONS CODE';
                 }
                 field("FA Entry Type"; Rec."FA Entry Type")
-
                 {
                     Caption = 'FA Entry Type';
                     ToolTip = 'FA Entry Type';
                 }
                 field("FA Entry No."; Rec."FA Entry No.")
-
                 {
                     Caption = 'FA Entry No.';
                     ToolTip = 'FA Entry No.';
@@ -124,85 +128,90 @@ page 50000 DataModelLedger
                 {
                     Caption = 'Customer No.';
                     ToolTip = 'Customer No.';
-
+                    Editable = false;
                 }
                 field("Customer Name"; CustName)
                 {
                     Caption = 'Customer Name';
                     ToolTip = 'Customer Name';
+                    Editable = false;
                 }
                 field("Customer VAT"; CustVATNo)
                 {
                     Caption = 'Customer VAT';
                     ToolTip = 'Customer VAT';
+                    Editable = false;
                 }
                 field("Customer Fiscal Code"; CustFiscCode)
                 {
                     Caption = 'Customer Fiscal Code';
                     ToolTip = 'Customer Fiscal Code';
+                    Editable = false;
                 }
                 field("Customer Default Dimension"; CustDefDim)
                 {
                     Caption = 'Customer Default Dimension';
                     ToolTip = 'Customer Default Dimension';
+                    Editable = false;
                 }
-
                 field("Vendor No."; VendNo)
                 {
                     Caption = 'Vendor No.';
                     ToolTip = 'Vendor No.';
+                    Editable = false;
                 }
                 field("Vendor Name"; VendName)
                 {
                     Caption = 'Vendor Name';
                     ToolTip = 'Vendor Name';
+                    Editable = false;
                 }
                 field("Vendor VAT"; VendVATNo)
                 {
                     Caption = 'Vendor VAT';
                     ToolTip = 'Vendor VAT';
+                    Editable = false;
                 }
                 field("Vendor Fiscal Code"; VendFiscCode)
                 {
                     Caption = 'Vendor Fiscal Code';
                     ToolTip = 'Vendor Fiscal Code';
+                    Editable = false;
                 }
                 field("Vendor Default Dimension"; VendDefDim)
                 {
                     Caption = 'Vendor Default Dimension';
                     ToolTip = 'Vendor Default Dimension';
+                    Editable = false;
                 }
                 field("FA Posting No."; FAPostNo)
                 {
                     Caption = 'FA Posting No.';
                     ToolTip = 'FA Posting No.';
+                    Editable = false;
                 }
-
                 field("FA Posting Type"; FAPostType)
                 {
                     Caption = 'FA Posting Type';
                     ToolTip = 'FA Posting Type';
+                    Editable = false;
                 }
             }
-
         }
-
     }
     var
         lRcCustomer: Record Customer;
         lRcVendor: Record Vendor;
         lRcFALedgerEntry: Record "FA Ledger Entry";
         lRcDefDim: Record "Default Dimension";
-        CustNo, CustFiscCode, CustDefDim, VendNo, VendFiscCode, VendDefDim : Code[20];
+        CustNo, CustFiscCode, CustDefDim, VendNo, VendFiscCode, VendDefDim, GLDefDim : Code[20];
         CustName, VendName : Text[100];
         CustVATNo, VendVATNo : Text[20];
         FAPostNo: Integer;
         FAPostType: Enum "FA Ledger Entry FA Posting Type";
 
     trigger OnAfterGetRecord()
-    
     begin
-        
         CustNo := '';
         CustName := '';
         CustVATNo := '';
@@ -213,11 +222,10 @@ page 50000 DataModelLedger
         VendVATNo := '';
         VendFiscCode := '';
         VendDefDim := '';
+        GLDefDim := '';
         FAPostNo := 0;
-
         case Rec."Source Type" of
             "Gen. Journal Source Type"::Customer:
-
                 begin
                     ;
                     lRcCustomer.Reset();
@@ -233,10 +241,8 @@ page 50000 DataModelLedger
                         CustDefDim := lRcDefDim."Dimension Value Code";
                 end;
         end;
-
         case Rec."Source Type" of
             "Gen. Journal Source Type"::Vendor:
-
                 begin
                     ;
                     lRcVendor.Reset();
@@ -252,7 +258,6 @@ page 50000 DataModelLedger
                         VendDefDim := lRcDefDim."Dimension Value Code";
                 end;
         end;
-
         case Rec."Source Type" of
             "Gen. Journal Source Type"::"Fixed Asset":
                 begin
@@ -262,8 +267,6 @@ page 50000 DataModelLedger
                     if lRcFALedgerEntry.FindFirst() then
                         FAPostNo := lRcFALedgerEntry."Entry No.";
                     FAPostType := lRcFALedgerEntry."FA Posting Type";
-
-
                 end;
         end;
     end;
