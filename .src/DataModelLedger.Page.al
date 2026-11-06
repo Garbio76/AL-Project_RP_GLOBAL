@@ -224,6 +224,13 @@ page 50000 DataModelLedger
         VendDefDim := '';
         GLDefDim := '';
         FAPostNo := 0;
+
+        lRcDefDim.SetRange("Table ID", 15);
+        lRcDefDim.SetFilter("No.", Rec."G/L Account No.");
+        lRcDefDim.SetFilter("Dimension Code", 'VARIATIONS GROUP');
+        if lRcDefDim.FindFirst() then
+            if lRcDefDim."Value Posting" = Enum::"Default Dimension Value Posting Type"::"Same Code" then
+                GLDefDim := lRcDefDim."Dimension Value Code";
         case Rec."Source Type" of
             "Gen. Journal Source Type"::Customer:
                 begin
@@ -235,6 +242,7 @@ page 50000 DataModelLedger
                     CustName := lRcCustomer.Name;
                     CustVATNo := lRcCustomer."VAT Registration No.";
                     CustFiscCode := lRcCustomer."Fiscal Code";
+                    lRcDefDim.Reset();
                     lRcDefDim.SetRange("Table ID", 18);
                     lRcDefDim.SetFilter("No.", Rec."Source No.");
                     if lRcDefDim.FindFirst() then
@@ -252,6 +260,7 @@ page 50000 DataModelLedger
                     VendName := lRcVendor.Name;
                     VendVATNo := lRcVendor."VAT Registration No.";
                     VendFiscCode := lRcVendor."Fiscal Code";
+                    lRcDefDim.Reset();
                     lRcDefDim.SetRange("Table ID", 23);
                     lRcDefDim.SetFilter("No.", Rec."Source No.");
                     if lRcDefDim.FindFirst() then
